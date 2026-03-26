@@ -1,0 +1,42 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  # Kiểm tra Client (Vite/React)
+  build-client:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install & Build Client
+        run: |
+          cd client
+          npm install
+          npm run build
+
+  # Kiểm tra Server (Node.js/Express)
+  build-server:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Server
+        run: |
+          cd server
+          npm install
+      - name: Run Server Check
+        run: |
+          cd server
+          npm start & 
+          sleep 5

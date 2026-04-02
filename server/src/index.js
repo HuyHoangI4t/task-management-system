@@ -5,6 +5,7 @@ const routes = require("./routes");
 const { notFoundHandler, errorHandler } = require("./middlewares/error.middleware");
 const { env } = require("./config/env");
 const { setupSwagger } = require("./config/swagger");
+const { connectDB } = require("./config/db");
 
 const app = express();
 
@@ -23,7 +24,12 @@ app.use("/api", routes);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-app.listen(env.PORT, () => {
-  console.log(`Server listening on http://localhost:${env.PORT}`);
-  console.log(`Swagger docs available at http://localhost:${env.PORT}/api-docs`);
-});
+const startServer = async () => {
+  await connectDB();
+  app.listen(env.PORT, () => {
+    // console.log(`Server listening on http://localhost:${env.PORT}`);
+    console.log(`Swagger docs available at http://localhost:${env.PORT}/api-docs`);
+  });
+};
+
+startServer();
